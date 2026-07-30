@@ -1,0 +1,26 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Rimba\Dms\Models;
+
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Table;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Rimba\Versioning\Models\Version;
+
+#[Table('dms_document_attachments')]
+#[Fillable(['document_id', 'version_id', 'name', 'path', 'mime_type', 'size', 'checksum'])]
+class DocumentAttachment extends Model
+{
+    public function document(): BelongsTo
+    {
+        return $this->belongsTo(Document::class);
+    }
+
+    public function version(): BelongsTo
+    {
+        return $this->belongsTo(Version::class);
+    }
+}
