@@ -23,7 +23,7 @@ return new class extends Migration
             $table->foreignId('category_id')->nullable()->constrained('dms_document_categories')->nullOnDelete();
             $table->string('doc_number')->unique();
             $table->string('title');
-            $table->string('dms_document_type')->index();
+            $table->string('document_type')->index();
             $table->string('status', 30)->default('draft')->index();
             $table->boolean('is_controlled')->default(true);
             $table->foreignId('team_id')->nullable()->constrained('org_teams')->nullOnDelete();

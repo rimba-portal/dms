@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Rimba\Dms\Builders\DocumentBuilder;
 use Rimba\Dms\Enums\DocumentStatus;
+use Rimba\Dms\Enums\SecurityClassification;
 use Rimba\Dms\Observers\DocumentObserver;
 use Rimba\Dms\Policies\DocumentPolicy;
 use Rimba\Versioning\Models\Version;
@@ -37,6 +38,7 @@ class Document extends Model
     {
         return [
             'status' => DocumentStatus::class,
+            'security_classification' => SecurityClassification::class,
             'is_controlled' => 'boolean',
             'requires_training' => 'boolean',
             'risk_assessment_tags' => 'array',
