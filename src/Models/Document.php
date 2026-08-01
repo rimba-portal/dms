@@ -17,6 +17,8 @@ use Rimba\Dms\Enums\DocumentStatus;
 use Rimba\Dms\Enums\SecurityClassification;
 use Rimba\Dms\Observers\DocumentObserver;
 use Rimba\Dms\Policies\DocumentPolicy;
+use Rimba\Organization\Models\OrgTeam;
+use Rimba\People\Models\Staff;
 use Rimba\Versioning\Models\Version;
 use Rimba\Versioning\Traits\HasVersions;
 
@@ -24,11 +26,29 @@ use Rimba\Versioning\Traits\HasVersions;
 #[UsePolicy(DocumentPolicy::class)]
 #[ObservedBy([DocumentObserver::class])]
 #[Fillable([
-    'parent_id', 'category_id', 'doc_number', 'title', 'document_type', 'status',
-    'is_controlled', 'team_id', 'owner_id', 'author_id', 'current_version_id',
-    'site_location', 'security_classification', 'regulatory_impact', 'risk_assessment_tags',
-    'requires_training', 'retention_period_years', 'effective_date', 'next_review_date',
-    'approved_date', 'obsolete_date', 'regulatory_hash', ])]
+    'parent_id',
+    'category_id',
+    'doc_number',
+    'title',
+    'document_type',
+    'status',
+    'is_controlled',
+    'team_id',
+    'owner_id',
+    'author_id',
+    'current_version_id',
+    'site_location',
+    'security_classification',
+    'regulatory_impact',
+    'risk_assessment_tags',
+    'requires_training',
+    'retention_period_years',
+    'effective_date',
+    'next_review_date',
+    'approved_date',
+    'obsolete_date',
+    'regulatory_hash',
+])]
 class Document extends Model
 {
     use HasVersions;
@@ -112,5 +132,20 @@ class Document extends Model
     public function retentions(): HasMany
     {
         return $this->hasMany(DocumentRetention::class);
+    }
+
+    public function team(): BelongsTo
+    {
+        return $this->belongsTo(OrgTeam::class, 'team_id');
+    }
+
+    public function owner(): BelongsTo
+    {
+        return $this->belongsTo(Staff::class, 'owner_id');
+    }
+
+    public function author(): BelongsTo
+    {
+        return $this->belongsTo(Staff::class, 'author_id');
     }
 }
