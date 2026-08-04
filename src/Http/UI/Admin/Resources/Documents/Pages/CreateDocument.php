@@ -10,4 +10,7 @@ use Rimba\Dms\Http\UI\Admin\Resources\Documents\DocumentResource;
 class CreateDocument extends CreateRecord
 {
     protected static string $resource = DocumentResource::class;
+
+    // Custom
+
 }

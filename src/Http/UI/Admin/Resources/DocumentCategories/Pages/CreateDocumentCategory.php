@@ -10,4 +10,7 @@ use Rimba\Dms\Http\UI\Admin\Resources\DocumentCategories\DocumentCategoryResourc
 class CreateDocumentCategory extends CreateRecord
 {
     protected static string $resource = DocumentCategoryResource::class;
+
+    // Custom
+
 }
