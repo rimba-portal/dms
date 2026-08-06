@@ -6,8 +6,8 @@ namespace Rimba\Dms\Http\UI\Staff\Resources\Documents\Pages;
 
 use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
-use Rimba\Dms\Http\UI\Staff\Resources\Documents\DocumentResource;
 use Filament\Support\Enums\Width;
+use Rimba\Dms\Http\UI\Staff\Resources\Documents\DocumentResource;
 
 class ViewDocument extends ViewRecord
 {
@@ -19,6 +19,7 @@ class ViewDocument extends ViewRecord
             EditAction::make(),
         ];
     }
+
     public function getMaxContentWidth(): Width
     {
         return Width::ScreenTwoExtraLarge;

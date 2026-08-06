@@ -4,14 +4,10 @@ declare(strict_types=1);
 
 namespace Rimba\Dms\Http\UI\Staff\Resources\Documents\Tables;
 
-use Rimba\Dms\Http\UI\Staff\Resources\Documents\DocumentResource;
-use Rimba\Base\Support\LinkViewResolver;
-use Bites\Service\Helpers\AttachmentLinkResolver;
-use Filament\Actions\EditAction;
-use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Model;
+use Rimba\Base\Support\LinkViewResolver;
+use Rimba\Dms\Http\UI\Staff\Resources\Documents\DocumentResource;
 
 class DocumentsTable
 {
