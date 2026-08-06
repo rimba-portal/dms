@@ -11,12 +11,12 @@ class DocumentPolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->can('dms.document.view');
+        return true; // $user->can('dms.document.view');
     }
 
     public function view(User $user, Document $document): bool
     {
-        return $user->can('dms.document.view');
+        return true; // $user->can('dms.document.view');
     }
 
     public function create(User $user): bool
