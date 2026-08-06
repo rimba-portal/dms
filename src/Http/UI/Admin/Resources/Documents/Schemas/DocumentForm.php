@@ -55,7 +55,7 @@ class DocumentForm
                                                 'lg' => 6,
                                             ]),
 
-                                        Select::make('dms_document_type')
+                                        Select::make('document_type')
                                             ->label('Document Type')
                                             ->options(fn (): array => config('rimba_dms.document_types', []))
                                             ->searchable()
