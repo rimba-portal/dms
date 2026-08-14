@@ -7,7 +7,6 @@ namespace Rimba\Dms\Http\UI\Admin\Resources\Documents;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Rimba\Dms\Http\UI\Admin\Resources\Documents\Pages\CreateDocument;
 use Rimba\Dms\Http\UI\Admin\Resources\Documents\Pages\EditDocument;
@@ -17,12 +16,15 @@ use Rimba\Dms\Http\UI\Admin\Resources\Documents\Schemas\DocumentForm;
 use Rimba\Dms\Http\UI\Admin\Resources\Documents\Schemas\DocumentInfolist;
 use Rimba\Dms\Http\UI\Admin\Resources\Documents\Tables\DocumentsTable;
 use Rimba\Dms\Models\Document;
+use UnitEnum;
 
 class DocumentResource extends Resource
 {
     protected static ?string $model = Document::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::ArrowSmallRight;
+    protected static string|UnitEnum|null $navigationGroup = 'Versioning';
+
+    protected static string|BackedEnum|null $navigationIcon = 'bites-dms';
 
     protected static ?string $recordTitleAttribute = 'title';
 

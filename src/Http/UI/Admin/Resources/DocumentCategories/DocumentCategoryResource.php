@@ -15,10 +15,13 @@ use Rimba\Dms\Http\UI\Admin\Resources\DocumentCategories\Pages\ListDocumentCateg
 use Rimba\Dms\Http\UI\Admin\Resources\DocumentCategories\Schemas\DocumentCategoryForm;
 use Rimba\Dms\Http\UI\Admin\Resources\DocumentCategories\Tables\DocumentCategoriesTable;
 use Rimba\Dms\Models\DocumentCategory;
+use UnitEnum;
 
 class DocumentCategoryResource extends Resource
 {
     protected static ?string $model = DocumentCategory::class;
+
+    protected static string|UnitEnum|null $navigationGroup = 'Document';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::ArrowSmallRight;
 
