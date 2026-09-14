@@ -30,7 +30,7 @@ class ReleaseDocument
                 'status' => DocumentStatus::Released,
                 'current_version_id' => $version->getKey(),
                 'effective_date' => now()->toDateString(),
-                'next_review_date' => now()->addMonths((int) config('rimba_dms.defaults.review_interval_months', 12))->toDateString(),
+                'next_review_date' => now()->addMonths((int) config('bites.dms.defaults.review_interval_months', 12))->toDateString(),
                 'regulatory_hash' => hash('sha256', $document->doc_number.'|'.$version->version.'|'.now()->toISOString()),
             ]);
 

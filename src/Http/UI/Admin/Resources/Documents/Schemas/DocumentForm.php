@@ -57,7 +57,7 @@ class DocumentForm
 
                                         Select::make('document_type')
                                             ->label('Document Type')
-                                            ->options(fn (): array => config('rimba_dms.document_types', []))
+                                            ->options(fn (): array => config('bites.dms.document_types', []))
                                             ->searchable()
                                             ->preload()
                                             ->required()

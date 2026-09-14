@@ -48,7 +48,7 @@ class DocumentsTable
 
                 TextColumn::make('document_type')
                     ->label('Type')
-                    ->formatStateUsing(fn (?string $state): string => config('rimba_dms.document_types.'.$state, str($state)->headline()->toString()))
+                    ->formatStateUsing(fn (?string $state): string => config('bites.dms.document_types.'.$state, str($state)->headline()->toString()))
                     ->badge()
                     ->color('gray')
                     ->sortable(),
@@ -125,7 +125,7 @@ class DocumentsTable
 
                 SelectFilter::make('dms_document_type')
                     ->label('Document Type')
-                    ->options(fn (): array => config('rimba_dms.document_types', [])),
+                    ->options(fn (): array => config('bites.dms.document_types', [])),
 
                 SelectFilter::make('security_classification')
                     ->label('Classification')

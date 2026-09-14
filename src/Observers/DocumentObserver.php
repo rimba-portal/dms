@@ -10,10 +10,10 @@ class DocumentObserver
 {
     public function creating(Document $document): void
     {
-        $document->status ??= config('rimba_dms.defaults.status', 'draft');
-        $document->security_classification ??= config('rimba_dms.defaults.security_classification', 'internal');
-        $document->retention_period_years ??= config('rimba_dms.defaults.retention_period_years', 5);
-        $document->is_controlled ??= config('rimba_dms.defaults.controlled', true);
+        $document->status ??= config('bites.dms.defaults.status', 'draft');
+        $document->security_classification ??= config('bites.dms.defaults.security_classification', 'internal');
+        $document->retention_period_years ??= config('bites.dms.defaults.retention_period_years', 5);
+        $document->is_controlled ??= config('bites.dms.defaults.controlled', true);
     }
 
     public function updated(Document $document): void
