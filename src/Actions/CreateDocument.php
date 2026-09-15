@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\DB;
 use Rimba\Dms\Events\DocumentCreated;
 use Rimba\Dms\Models\Document;
 use Rimba\Versioning\Enums\VersionIncrementType;
-use Rimba\Versioning\Models\Version;
 
 class CreateDocument
 {
@@ -35,16 +34,8 @@ class CreateDocument
                     ->createDocumentVersion
                     ->execute(
                         document: $document,
-
-                        versionData: [
-                            ...$versionData,
-
-                            /*
-                             * Initial version
-                             */
-
-                            'revision_type' => VersionIncrementType::Major,
-                        ],
+                        versionData: $versionData,
+                        increment: VersionIncrementType::Major,
                     );
 
                 /*
