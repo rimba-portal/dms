@@ -15,6 +15,7 @@ class CreateDocumentVersion
         Document $document,
         array $versionData,
     ): Version {
+
         return DB::transaction(
             function () use (
                 $document,
@@ -26,7 +27,8 @@ class CreateDocumentVersion
                     ->create([
                         ...$versionData,
 
-                        'status' => VersionStatus::Draft,
+                        'status' => $versionData['status']
+                            ?? VersionStatus::Draft->value,
                     ]);
             }
         );
