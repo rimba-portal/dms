@@ -7,7 +7,6 @@ namespace Rimba\Dms\Http\UI\Staff\Resources\Documents;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Rimba\Dms\Http\UI\Staff\Resources\Documents\Pages\ListDocuments;
 use Rimba\Dms\Http\UI\Staff\Resources\Documents\Pages\ViewDocument;
@@ -20,7 +19,7 @@ class DocumentResource extends Resource
 {
     protected static ?string $model = Document::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::ArrowSmallRight;
+    protected static string|BackedEnum|null $navigationIcon = 'bites-s-dms';
 
     protected static string|UnitEnum|null $navigationGroup = 'Knowledge';
 
