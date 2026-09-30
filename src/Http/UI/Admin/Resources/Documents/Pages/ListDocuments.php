@@ -12,10 +12,14 @@ class ListDocuments extends ListRecords
 {
     protected static string $resource = DocumentResource::class;
 
+    protected static ?string $title = 'Controlled Documents';
+
+    protected ?string $subheading = 'Track, review, and control official documents, standard operating procedures, and compliance files.';
+
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make()->label('New Document'),
+            CreateAction::make(),
         ];
     }
 }

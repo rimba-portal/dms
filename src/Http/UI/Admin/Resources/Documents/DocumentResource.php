@@ -22,9 +22,11 @@ class DocumentResource extends Resource
 {
     protected static ?string $model = Document::class;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Versioning';
+    protected static string|UnitEnum|null $navigationGroup = 'Dms';
 
     protected static string|BackedEnum|null $navigationIcon = 'bites-dms';
+
+    protected static ?int $navigationSort = 72;
 
     protected static ?string $recordTitleAttribute = 'title';
 
@@ -57,6 +59,7 @@ class DocumentResource extends Resource
             'create' => CreateDocument::route('/create'),
             'view' => ViewDocument::route('/{record}'),
             'edit' => EditDocument::route('/{record}/edit'),
+            //
         ];
     }
 }
