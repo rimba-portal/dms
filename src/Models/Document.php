@@ -2,150 +2,69 @@
 
 declare(strict_types=1);
 
-namespace Rimba\Dms\Models;
+namespace Rimba\Document\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Attributes\Table;
-use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Rimba\Dms\Builders\DocumentBuilder;
-use Rimba\Dms\Enums\DocumentStatus;
-use Rimba\Dms\Enums\SecurityClassification;
-use Rimba\Dms\Observers\DocumentObserver;
-use Rimba\Dms\Policies\DocumentPolicy;
-use Rimba\Organization\Models\OrgTeam;
-use Rimba\People\Models\Staff;
-use Rimba\Versioning\Models\Version;
-use Rimba\Versioning\Traits\HasVersions;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Packstub\Flow\Concerns\HasWorkflows;
+use Rimba\Attributing\Traits\HasThingAttributes;
+use Rimba\Document\Enums\DocumentStatus;
 
-#[Table('dms_documents')]
-#[UsePolicy(DocumentPolicy::class)]
-#[ObservedBy([DocumentObserver::class])]
 #[Fillable([
-    'parent_id',
-    'category_id',
-    'doc_number',
+    'document_type_id',
+    'current_revision_id',
+    'code',
     'title',
-    'document_type',
+    'description',
     'status',
-    'is_controlled',
-    'team_id',
+    'owner_type',
     'owner_id',
-    'author_id',
-    'current_version_id',
-    'site_location',
-    'security_classification',
-    'regulatory_impact',
-    'risk_assessment_tags',
-    'requires_training',
-    'retention_period_years',
-    'effective_date',
-    'next_review_date',
-    'approved_date',
-    'obsolete_date',
-    'regulatory_hash',
 ])]
+#[Table(name: 'documents')]
 class Document extends Model
 {
-    use HasVersions;
-    use SoftDeletes;
+    use HasThingAttributes;
+    use HasWorkflows;
 
     protected function casts(): array
     {
         return [
+            'document_type_id' => 'integer',
+            'current_revision_id' => 'integer',
+            'owner_id' => 'integer',
             'status' => DocumentStatus::class,
-            'security_classification' => SecurityClassification::class,
-            'is_controlled' => 'boolean',
-            'requires_training' => 'boolean',
-            'risk_assessment_tags' => 'array',
-            'effective_date' => 'date',
-            'next_review_date' => 'date',
-            'approved_date' => 'date',
-            'obsolete_date' => 'date',
         ];
     }
 
-    public function newEloquentBuilder($query): DocumentBuilder
+    public function type(): BelongsTo
     {
-        return new DocumentBuilder($query);
+        return $this->belongsTo(
+            config('document.models.document_type', DocumentType::class),
+            'document_type_id',
+        );
     }
 
-    public function parent(): BelongsTo
+    public function revisions(): HasMany
     {
-        return $this->belongsTo(self::class, 'parent_id');
+        return $this->hasMany(
+            config('document.models.document_revision', DocumentRevision::class)
+        );
     }
 
-    public function children(): HasMany
+    public function currentRevision(): BelongsTo
     {
-        return $this->hasMany(self::class, 'parent_id');
+        return $this->belongsTo(
+            config('document.models.document_revision', DocumentRevision::class),
+            'current_revision_id',
+        );
     }
 
-    public function category(): BelongsTo
+    public function owner(): MorphTo
     {
-        return $this->belongsTo(DocumentCategory::class, 'category_id');
-    }
-
-    public function currentVersion(): BelongsTo
-    {
-        return $this->belongsTo(Version::class, 'current_version_id');
-    }
-
-    public function approvals(): HasMany
-    {
-        return $this->hasMany(DocumentApproval::class);
-    }
-
-    public function signatures(): HasMany
-    {
-        return $this->hasMany(DocumentSignature::class);
-    }
-
-    public function distributions(): HasMany
-    {
-        return $this->hasMany(DocumentDistribution::class);
-    }
-
-    public function acknowledgements(): HasMany
-    {
-        return $this->hasMany(DocumentAcknowledgement::class);
-    }
-
-    public function reviews(): HasMany
-    {
-        return $this->hasMany(DocumentReview::class);
-    }
-
-    public function trainings(): HasMany
-    {
-        return $this->hasMany(DocumentTraining::class);
-    }
-
-    public function attachments(): HasMany
-    {
-        return $this->hasMany(DocumentAttachment::class);
-    }
-
-    public function retentions(): HasMany
-    {
-        return $this->hasMany(DocumentRetention::class);
-    }
-
-    public function team(): BelongsTo
-    {
-        return $this->belongsTo(OrgTeam::class, 'team_id');
-    }
-
-    public function owner(): BelongsTo
-    {
-        return $this->belongsTo(Staff::class, 'owner_id');
-    }
-
-    public function author(): BelongsTo
-    {
-        return $this->belongsTo(Staff::class, 'author_id');
+        return $this->morphTo();
     }
 }
