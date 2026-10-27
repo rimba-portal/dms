@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rimba\Dms\Http\UI\Team\Resources\Documents\RelationManagers;
+namespace Rimba\Document\Http\UI\Team\Resources\Documents\RelationManagers;
 
 use Filament\Actions\Action;
 use Filament\Actions\ViewAction;

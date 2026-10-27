@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Rimba\Dms\Http\UI\Team\Resources\Documents\Tables;
+namespace Rimba\Document\Http\UI\Team\Resources\Documents\Tables;
 
 use Filament\Actions;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Rimba\Base\Support\LinkViewResolver;
-use Rimba\Dms\Actions\ApproveDocument;
-use Rimba\Dms\Actions\ObsoleteDocument;
-use Rimba\Dms\Actions\SubmitDocumentForReview;
-use Rimba\Dms\Enums\DocumentStatus;
-use Rimba\Dms\Http\UI\Team\Resources\Documents\Actions\AddVersionAction;
-use Rimba\Dms\Http\UI\Team\Resources\Documents\DocumentResource;
-use Rimba\Dms\Models\Document;
+use Rimba\Document\Actions\ApproveDocument;
+use Rimba\Document\Actions\ObsoleteDocument;
+use Rimba\Document\Actions\SubmitDocumentForReview;
+use Rimba\Document\Enums\DocumentStatus;
+use Rimba\Document\Http\UI\Team\Resources\Documents\Actions\AddVersionAction;
+use Rimba\Document\Http\UI\Team\Resources\Documents\DocumentResource;
+use Rimba\Document\Models\Document;
 
 class DocumentsTable
 {

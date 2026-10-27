@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Rimba\Dms\Http\UI\Team\Resources\Documents\Schemas;
+namespace Rimba\Document\Http\UI\Team\Resources\Documents\Schemas;
 
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Number;
-use Rimba\Dms\Enums\DocumentStatus;
-use Rimba\Dms\Enums\SecurityClassification;
+use Rimba\Document\Enums\DocumentStatus;
+use Rimba\Document\Enums\SecurityClassification;
 use Rimba\Versioning\Enums\VersionStatus;
 
 class DocumentInfolist

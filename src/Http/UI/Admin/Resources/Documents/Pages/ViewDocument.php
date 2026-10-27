@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rimba\Dms\Http\UI\Admin\Resources\Documents\Pages;
+namespace Rimba\Document\Http\UI\Admin\Resources\Documents\Pages;
 
 use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
-use Rimba\Dms\Http\UI\Admin\Resources\Documents\DocumentResource;
+use Rimba\Document\Http\UI\Admin\Resources\Documents\DocumentResource;
 
 class ViewDocument extends ViewRecord
 {

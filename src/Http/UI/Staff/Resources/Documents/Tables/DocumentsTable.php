@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rimba\Dms\Http\UI\Staff\Resources\Documents\Tables;
+namespace Rimba\Document\Http\UI\Staff\Resources\Documents\Tables;
 
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Rimba\Base\Support\LinkViewResolver;
-use Rimba\Dms\Http\UI\Staff\Resources\Documents\DocumentResource;
+use Rimba\Document\Http\UI\Staff\Resources\Documents\DocumentResource;
 
 class DocumentsTable
 {

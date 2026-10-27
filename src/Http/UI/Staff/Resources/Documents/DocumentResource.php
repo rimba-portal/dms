@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Rimba\Dms\Http\UI\Staff\Resources\Documents;
+namespace Rimba\Document\Http\UI\Staff\Resources\Documents;
 
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
-use Rimba\Dms\Http\UI\Staff\Resources\Documents\Pages\ListDocuments;
-use Rimba\Dms\Http\UI\Staff\Resources\Documents\Pages\ViewDocument;
-use Rimba\Dms\Http\UI\Staff\Resources\Documents\Schemas\DocumentInfolist;
-use Rimba\Dms\Http\UI\Staff\Resources\Documents\Tables\DocumentsTable;
-use Rimba\Dms\Models\Document;
+use Rimba\Document\Http\UI\Staff\Resources\Documents\Pages\ListDocuments;
+use Rimba\Document\Http\UI\Staff\Resources\Documents\Pages\ViewDocument;
+use Rimba\Document\Http\UI\Staff\Resources\Documents\Schemas\DocumentInfolist;
+use Rimba\Document\Http\UI\Staff\Resources\Documents\Tables\DocumentsTable;
+use Rimba\Document\Models\Document;
 use UnitEnum;
 
 class DocumentResource extends Resource

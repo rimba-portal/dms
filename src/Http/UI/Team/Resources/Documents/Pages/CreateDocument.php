@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rimba\Dms\Http\UI\Team\Resources\Documents\Pages;
+namespace Rimba\Document\Http\UI\Team\Resources\Documents\Pages;
 
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
-use Rimba\Dms\Actions\CreateDocument as CreateDocumentAction;
-use Rimba\Dms\Http\UI\Team\Resources\Documents\DocumentResource;
-use Rimba\Dms\Http\UI\Team\Resources\Documents\Schemas\DocumentVersionForm;
+use Rimba\Document\Actions\CreateDocument as CreateDocumentAction;
+use Rimba\Document\Http\UI\Team\Resources\Documents\DocumentResource;
+use Rimba\Document\Http\UI\Team\Resources\Documents\Schemas\DocumentVersionForm;
 
 class CreateDocument extends CreateRecord
 {

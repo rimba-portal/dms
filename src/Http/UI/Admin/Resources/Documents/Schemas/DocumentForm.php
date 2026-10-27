@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rimba\Dms\Http\UI\Admin\Resources\Documents\Schemas;
+namespace Rimba\Document\Http\UI\Admin\Resources\Documents\Schemas;
 
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\KeyValue;
@@ -15,9 +15,9 @@ use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
-use Rimba\Dms\Enums\DocumentStatus;
-use Rimba\Dms\Enums\SecurityClassification;
-use Rimba\Dms\Models\DocumentCategory;
+use Rimba\Document\Enums\DocumentStatus;
+use Rimba\Document\Enums\SecurityClassification;
+use Rimba\Document\Models\DocumentCategory;
 
 class DocumentForm
 {

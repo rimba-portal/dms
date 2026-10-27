@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rimba\Dms\Http\UI\Staff\Resources\Documents\Schemas;
+namespace Rimba\Document\Http\UI\Staff\Resources\Documents\Schemas;
 
 use Filament\Infolists\Components\ViewEntry;
 use Filament\Schemas\Components\Section;

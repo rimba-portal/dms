@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rimba\Dms\Http\UI\Admin\Resources\Documents\Schemas;
+namespace Rimba\Document\Http\UI\Admin\Resources\Documents\Schemas;
 
 use Filament\Schemas\Schema;
 

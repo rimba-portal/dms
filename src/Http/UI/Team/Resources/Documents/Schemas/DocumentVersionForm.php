@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rimba\Dms\Http\UI\Team\Resources\Documents\Schemas;
+namespace Rimba\Document\Http\UI\Team\Resources\Documents\Schemas;
 
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;

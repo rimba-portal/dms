@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rimba\Dms\Http\UI\Admin\Resources\Documents\Tables;
+namespace Rimba\Document\Http\UI\Admin\Resources\Documents\Tables;
 
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
@@ -16,12 +16,12 @@ use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Rimba\Dms\Actions\ApproveDocument;
-use Rimba\Dms\Actions\ObsoleteDocument;
-use Rimba\Dms\Actions\SubmitDocumentForReview;
-use Rimba\Dms\Enums\DocumentStatus;
-use Rimba\Dms\Enums\SecurityClassification;
-use Rimba\Dms\Models\Document;
+use Rimba\Document\Actions\ApproveDocument;
+use Rimba\Document\Actions\ObsoleteDocument;
+use Rimba\Document\Actions\SubmitDocumentForReview;
+use Rimba\Document\Enums\DocumentStatus;
+use Rimba\Document\Enums\SecurityClassification;
+use Rimba\Document\Models\Document;
 
 class DocumentsTable
 {

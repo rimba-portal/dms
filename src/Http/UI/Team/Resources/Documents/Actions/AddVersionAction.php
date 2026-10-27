@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rimba\Dms\Http\UI\Team\Resources\Documents\Actions;
+namespace Rimba\Document\Http\UI\Team\Resources\Documents\Actions;
 
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
-use Rimba\Dms\Actions\CreateDocumentVersion;
-use Rimba\Dms\Http\UI\Team\Resources\Documents\Schemas\DocumentVersionForm;
-use Rimba\Dms\Models\Document;
+use Rimba\Document\Actions\CreateDocumentVersion;
+use Rimba\Document\Http\UI\Team\Resources\Documents\Schemas\DocumentVersionForm;
+use Rimba\Document\Models\Document;
 
 class AddVersionAction
 {

@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Rimba\Dms\Http\UI\Admin\Resources\Documents;
+namespace Rimba\Document\Http\UI\Admin\Resources\Documents;
 
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
-use Rimba\Dms\Http\UI\Admin\Resources\Documents\Pages\CreateDocument;
-use Rimba\Dms\Http\UI\Admin\Resources\Documents\Pages\EditDocument;
-use Rimba\Dms\Http\UI\Admin\Resources\Documents\Pages\ListDocuments;
-use Rimba\Dms\Http\UI\Admin\Resources\Documents\Pages\ViewDocument;
-use Rimba\Dms\Http\UI\Admin\Resources\Documents\Schemas\DocumentForm;
-use Rimba\Dms\Http\UI\Admin\Resources\Documents\Schemas\DocumentInfolist;
-use Rimba\Dms\Http\UI\Admin\Resources\Documents\Tables\DocumentsTable;
-use Rimba\Dms\Models\Document;
+use Rimba\Document\Http\UI\Admin\Resources\Documents\Pages\CreateDocument;
+use Rimba\Document\Http\UI\Admin\Resources\Documents\Pages\EditDocument;
+use Rimba\Document\Http\UI\Admin\Resources\Documents\Pages\ListDocuments;
+use Rimba\Document\Http\UI\Admin\Resources\Documents\Pages\ViewDocument;
+use Rimba\Document\Http\UI\Admin\Resources\Documents\Schemas\DocumentForm;
+use Rimba\Document\Http\UI\Admin\Resources\Documents\Schemas\DocumentInfolist;
+use Rimba\Document\Http\UI\Admin\Resources\Documents\Tables\DocumentsTable;
+use Rimba\Document\Models\Document;
 use UnitEnum;
 
 class DocumentResource extends Resource
