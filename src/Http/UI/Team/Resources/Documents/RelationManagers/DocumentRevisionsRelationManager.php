@@ -47,7 +47,27 @@ class DocumentRevisionsRelationManager extends RelationManager
                             ->label('Revision')
                             ->placeholder('1.0')
                             ->required()
-                            ->maxLength(50),
+                            ->maxLength(50)
+                            ->rule(function (): \Closure {
+                                return function (
+                                    string $attribute,
+                                    mixed $value,
+                                    \Closure $fail,
+                                ): void {
+                                    /** @var Document $model */
+                                    $model = $this->getOwnerRecord();
+
+                                    if (
+                                        $model->revisions()
+                                            ->where('revision', $value)
+                                            ->exists()
+                                    ) {
+                                        $fail(
+                                            'This revision already exists for the document.',
+                                        );
+                                    }
+                                };
+                            }),
 
                         Radio::make('content_source')
                             ->label('Content Source')
@@ -115,45 +135,31 @@ class DocumentRevisionsRelationManager extends RelationManager
             ->recordTitleAttribute('revision')
             ->defaultSort('created_at', 'desc')
             ->columns([
-                TextInput::make('revision')
+                TextColumn::make('revision')
                     ->label('Revision')
-                    ->placeholder('1.0')
-                    ->required()
-                    ->maxLength(50)
-                    ->rule(function (): \Closure {
-                        return function (
-                            string $attribute,
-                            mixed $value,
-                            \Closure $fail,
-                        ): void {
-                            if (
-                                $this->getOwnerRecord()
-                                    ->revisions()
-                                    ->where('revision', $value)
-                                    ->exists()
-                            ) {
-                                $fail(
-                                    'This revision already exists for the document.',
-                                );
-                            }
-                        };
-                    }),
+                    ->badge()
+                    ->weight('bold')
+                    ->sortable(),
 
                 TextColumn::make('status')
                     ->label('Status')
                     ->badge()
                     ->formatStateUsing(
                         fn (DocumentRevisionStatus|string|null $state): string => $state instanceof DocumentRevisionStatus
-                            ? str($state->value)->headline()->toString()
-                            : str((string) $state)->headline()->toString(),
+                                ? str($state->value)
+                                    ->headline()
+                                    ->toString()
+                                : str((string) $state)
+                                    ->headline()
+                                    ->toString(),
                     ),
 
                 TextColumn::make('original_filename')
                     ->label('Content')
                     ->placeholder(
                         fn (DocumentRevision $record): string => filled($record->external_url)
-                            ? 'External URL'
-                            : '-',
+                                ? 'External URL'
+                                : '-',
                     )
                     ->limit(40),
 
@@ -179,9 +185,7 @@ class DocumentRevisionsRelationManager extends RelationManager
                     ->label('Add Revision')
                     ->icon('heroicon-o-document-plus')
                     ->using(
-                        function (
-                            array $data,
-                        ): DocumentRevision {
+                        function (array $data): DocumentRevision {
                             /** @var Document $model */
                             $model = $this->getOwnerRecord();
 
