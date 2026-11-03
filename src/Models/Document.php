@@ -42,23 +42,18 @@ class Document extends Model
 
     public function type(): BelongsTo
     {
-        return $this->belongsTo(
-            config('document.models.document_type', DocumentType::class),
-            'document_type_id',
-        );
+        return $this->belongsTo(DocumentType::class, 'document_type_id');
     }
 
     public function revisions(): HasMany
     {
-        return $this->hasMany(
-            config('document.models.document_revision', DocumentRevision::class)
-        );
+        return $this->hasMany(DocumentRevision::class);
     }
 
     public function currentRevision(): BelongsTo
     {
         return $this->belongsTo(
-            config('document.models.document_revision', DocumentRevision::class),
+            DocumentRevision::class,
             'current_revision_id',
         );
     }

@@ -54,7 +54,7 @@ class DocumentRevision extends Model
 
     public function document(): BelongsTo
     {
-        return $this->belongsTo(config('document.models.document', Document::class));
+        return $this->belongsTo(Document::class);
     }
 
     public function questionCount(): Attribute

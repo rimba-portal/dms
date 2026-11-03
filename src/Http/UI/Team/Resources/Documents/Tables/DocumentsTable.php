@@ -4,111 +4,105 @@ declare(strict_types=1);
 
 namespace Rimba\Document\Http\UI\Team\Resources\Documents\Tables;
 
-use Filament\Actions;
-use Filament\Support\Icons\Heroicon;
+use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Rimba\Base\Support\LinkViewResolver;
-use Rimba\Document\Actions\ApproveDocument;
-use Rimba\Document\Actions\ObsoleteDocument;
-use Rimba\Document\Actions\SubmitDocumentForReview;
-use Rimba\Document\Enums\DocumentStatus;
 use Rimba\Document\Http\UI\Team\Resources\Documents\Actions\AddVersionAction;
 use Rimba\Document\Http\UI\Team\Resources\Documents\DocumentResource;
-use Rimba\Document\Models\Document;
 
 class DocumentsTable
 {
-    // use HasRecordLinks;
-
     public static function configure(Table $table): Table
     {
         return LinkViewResolver::attach(
             $table,
-            DocumentResource::class
+            DocumentResource::class,
         )
+            ->defaultSort('updated_at', 'desc')
             ->columns([
-                TextColumn::make('file_name'),
-                TextColumn::make('type'),
+                TextColumn::make('code')
+                    ->label('Number')
+                    ->searchable()
+                    ->sortable()
+                    ->copyable()
+                    ->weight('bold'),
+
+                TextColumn::make('title')
+                    ->label('Document')
+                    ->searchable()
+                    ->sortable()
+                    ->wrap()
+                    ->description(
+                        fn ($record): ?string => filled($record->description)
+                            ? str($record->description)
+                                ->limit(80)
+                                ->toString()
+                            : null
+                    ),
+
+                TextColumn::make('type.name')
+                    ->label('Type')
+                    ->badge()
+                    ->sortable()
+                    ->placeholder('-'),
+
                 TextColumn::make('currentVersion.version')
                     ->label('Current Version')
                     ->badge()
-                    ->placeholder('Not released')
-                    ->sortable(),
+                    ->placeholder('Not released'),
 
-                TextColumn::make('currentVersion.content_type')
-                    ->label('Content')
-                    ->badge()
+                TextColumn::make('owner.name')
+                    ->label('Owner')
                     ->placeholder('-')
                     ->toggleable(),
 
+                TextColumn::make('next_review_date')
+                    ->label('Next Review')
+                    ->date()
+                    ->sortable()
+                    ->placeholder('-'),
+
+                IconColumn::make('controlled')
+                    ->label('Controlled')
+                    ->boolean()
+                    ->toggleable(),
+
+                IconColumn::make('requires_training')
+                    ->label('Training')
+                    ->boolean()
+                    ->toggleable(),
+
+                TextColumn::make('updated_at')
+                    ->label('Updated')
+                    ->since()
+                    ->sortable()
+                    ->toggleable(
+                        isToggledHiddenByDefault: true,
+                    ),
+            ])
+            ->filters([
+                SelectFilter::make('document_type_id')
+                    ->label('Document Type')
+                    ->relationship('type', 'name')
+                    ->searchable()
+                    ->preload(),
             ])
             ->recordActions([
-                Actions\ViewAction::make(),
+                ViewAction::make(),
 
                 AddVersionAction::make(),
 
-                Actions\EditAction::make()
+                EditAction::make()
                     ->label('Edit Metadata'),
-
-                Actions\Action::make('submitForReview')
-                    ->label('Submit Review')
-                    ->icon(Heroicon::OutlinedArrowUpTray)
-                    ->color('warning')
-                    ->requiresConfirmation()
-                    ->visible(
-                        fn (Document $record): bool => self::statusIs(
-                            $record,
-                            DocumentStatus::Draft,
-                        )
-                    )
-                    ->action(
-                        fn (Document $record): Document => app(SubmitDocumentForReview::class)
-                            ->execute($record)
-                    ),
-
-                Actions\Action::make('approve')
-                    ->label('Approve')
-                    ->icon(Heroicon::OutlinedCheckCircle)
-                    ->color('info')
-                    ->requiresConfirmation()
-                    ->visible(
-                        fn (Document $record): bool => self::statusIs(
-                            $record,
-                            DocumentStatus::Review,
-                        )
-                    )
-                    ->action(
-                        fn (Document $record): Document => app(ApproveDocument::class)
-                            ->execute($record)
-                    ),
-
-                Actions\Action::make('obsolete')
-                    ->label('Obsolete')
-                    ->icon(
-                        Heroicon::OutlinedArchiveBoxXMark
-                    )
-                    ->color('danger')
-                    ->requiresConfirmation()
-                    ->visible(
-                        fn (Document $record): bool => ! self::statusIs(
-                            $record,
-                            DocumentStatus::Obsolete,
-                        )
-                    )
-                    ->action(
-                        fn (Document $record): Document => app(ObsoleteDocument::class)
-                            ->execute($record)
-                    ),
-            ]);
-    }
-
-    protected static function statusIs(
-        Document $record,
-        DocumentStatus $status,
-    ): bool {
-        return $record->status instanceof DocumentStatus
-            ? $record->status === $status
-            : $record->status === $status->value;
+            ])
+            ->emptyStateIcon('heroicon-o-document-text')
+            ->emptyStateHeading('No documents')
+            ->emptyStateDescription(
+                'Create the first controlled document for this team.',
+            );
     }
 }

@@ -10,8 +10,12 @@ use Rimba\Document\Http\UI\Team\Resources\Documents\DocumentResource;
 
 class ListDocuments extends ListRecords
 {
-    protected static string $resource =
-        DocumentResource::class;
+    protected static string $resource = DocumentResource::class;
+
+    protected static ?string $title = 'Documents';
+
+    protected ?string $subheading =
+        'Create and maintain controlled documents owned by the team.';
 
     protected function getHeaderActions(): array
     {

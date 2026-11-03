@@ -19,11 +19,13 @@ class DocumentResource extends Resource
 {
     protected static ?string $model = Document::class;
 
-    protected static string|BackedEnum|null $navigationIcon = 'bites-s-dms';
-
     protected static string|UnitEnum|null $navigationGroup = 'Knowledge';
 
-    protected static ?string $modelLabel = 'Documents';
+    protected static string|BackedEnum|null $navigationIcon = 'bites-s-dms';
+
+    protected static ?string $navigationLabel = 'Documents';
+
+    protected static ?int $navigationSort = 10;
 
     protected static ?string $recordTitleAttribute = 'title';
 
@@ -35,13 +37,6 @@ class DocumentResource extends Resource
     public static function table(Table $table): Table
     {
         return DocumentsTable::configure($table);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
     }
 
     public static function getPages(): array

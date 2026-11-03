@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rimba\Document\Http\UI\Staff\Resources\Documents\Pages;
 
-use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
 use Filament\Support\Enums\Width;
 use Rimba\Document\Http\UI\Staff\Resources\Documents\DocumentResource;
@@ -15,9 +14,7 @@ class ViewDocument extends ViewRecord
 
     protected function getHeaderActions(): array
     {
-        return [
-            EditAction::make(),
-        ];
+        return [];
     }
 
     public function getMaxContentWidth(): Width
