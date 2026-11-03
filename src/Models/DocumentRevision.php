@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Packstub\Flow\Concerns\HasWorkflows;
 use Rimba\Document\Enums\DocumentRevisionStatus;
+use Rimba\Request\Concerns\HasWorkflows;
 
 #[Fillable([
     'document_id',

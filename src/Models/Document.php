@@ -10,9 +10,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Packstub\Flow\Concerns\HasWorkflows;
 use Rimba\Attributing\Traits\HasThingAttributes;
 use Rimba\Document\Enums\DocumentStatus;
+use Rimba\Request\Concerns\HasWorkflows;
 
 #[Fillable([
     'document_type_id',
