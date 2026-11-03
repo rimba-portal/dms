@@ -8,15 +8,21 @@ use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Http\UploadedFile;
+use Rimba\Document\Actions\CreateDocumentRevision;
+use Rimba\Document\Enums\DocumentRevisionStatus;
+use Rimba\Document\Models\Document;
+use Rimba\Document\Models\DocumentRevision;
 
 class DocumentRevisionsRelationManager extends RelationManager
 {
@@ -34,7 +40,7 @@ class DocumentRevisionsRelationManager extends RelationManager
             ->components([
                 Section::make('Revision')
                     ->description(
-                        'Create or update a controlled revision of this document.',
+                        'Add controlled content by uploading a document or referencing an external URL.',
                     )
                     ->columns(2)
                     ->schema([
@@ -44,46 +50,59 @@ class DocumentRevisionsRelationManager extends RelationManager
                             ->required()
                             ->maxLength(50),
 
-                        Select::make('source')
+                        Radio::make('content_source')
                             ->label('Content Source')
                             ->options([
-                                'upload' => 'Upload Document',
+                                'file' => 'Upload File',
                                 'url' => 'External URL',
                             ])
-                            ->default('upload')
-                            ->required()
-                            ->live(),
+                            ->default('file')
+                            ->inline()
+                            ->live()
+                            ->dehydrated(false)
+                            ->required(),
 
-                        FileUpload::make('file_path')
+                        FileUpload::make('uploaded_file')
                             ->label('Document File')
-                            ->directory('documents/revisions')
-                            ->preserveFilenames()
-                            ->downloadable()
-                            ->openable()
+                            ->storeFiles(false)
                             ->required(
-                                fn (Get $get): bool => $get('source') === 'upload',
+                                fn (Get $get): bool => $get('content_source') === 'file',
                             )
                             ->visible(
-                                fn (Get $get): bool => $get('source') === 'upload',
+                                fn (Get $get): bool => $get('content_source') === 'file',
                             )
+                            ->acceptedFileTypes([
+                                'application/pdf',
+                                'application/msword',
+                                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                                'application/vnd.ms-excel',
+                                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                                'application/vnd.ms-powerpoint',
+                                'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                                'text/plain',
+                                'text/csv',
+                                'image/jpeg',
+                                'image/png',
+                            ])
+                            ->maxSize(51200)
                             ->columnSpanFull(),
 
-                        TextInput::make('url')
-                            ->label('Document URL')
-                            ->placeholder('https://')
+                        TextInput::make('external_url')
+                            ->label('External URL')
+                            ->placeholder('https://...')
                             ->url()
                             ->required(
-                                fn (Get $get): bool => $get('source') === 'url',
+                                fn (Get $get): bool => $get('content_source') === 'url',
                             )
                             ->visible(
-                                fn (Get $get): bool => $get('source') === 'url',
+                                fn (Get $get): bool => $get('content_source') === 'url',
                             )
                             ->columnSpanFull(),
 
                         Textarea::make('change_summary')
                             ->label('Change Summary')
                             ->placeholder(
-                                'Describe what is introduced or changed in this revision.',
+                                'Describe the initial issue or changes introduced by this revision.',
                             )
                             ->rows(3)
                             ->columnSpanFull(),
@@ -103,22 +122,35 @@ class DocumentRevisionsRelationManager extends RelationManager
                     ->weight('bold')
                     ->sortable(),
 
-                TextColumn::make('source')
-                    ->label('Source')
+                TextColumn::make('status')
+                    ->label('Status')
                     ->badge()
                     ->formatStateUsing(
-                        fn (string $state): string => match ($state) {
-                            'upload' => 'Uploaded File',
-                            'url' => 'External URL',
-                            default => $state,
-                        },
+                        fn (DocumentRevisionStatus|string|null $state): string => $state instanceof DocumentRevisionStatus
+                            ? str($state->value)->headline()->toString()
+                            : str((string) $state)->headline()->toString(),
                     ),
+
+                TextColumn::make('original_filename')
+                    ->label('Content')
+                    ->placeholder(
+                        fn (DocumentRevision $record): string => filled($record->external_url)
+                            ? 'External URL'
+                            : '-',
+                    )
+                    ->limit(40),
 
                 TextColumn::make('change_summary')
                     ->label('Change Summary')
                     ->limit(60)
                     ->wrap()
-                    ->placeholder('Initial issue'),
+                    ->placeholder('-'),
+
+                TextColumn::make('effective_at')
+                    ->label('Effective')
+                    ->dateTime()
+                    ->placeholder('-')
+                    ->sortable(),
 
                 TextColumn::make('created_at')
                     ->label('Created')
@@ -128,14 +160,55 @@ class DocumentRevisionsRelationManager extends RelationManager
             ->headerActions([
                 CreateAction::make()
                     ->label('Add Revision')
-                    ->icon('heroicon-o-document-plus'),
+                    ->icon('heroicon-o-document-plus')
+                    ->using(
+                        function (
+                            array $data,
+                        ): DocumentRevision {
+                            /** @var Document $model */
+                            $model = $this->getOwnerRecord();
+
+                            $file = $data['uploaded_file'] ?? null;
+
+                            unset(
+                                $data['uploaded_file'],
+                                $data['content_source'],
+                            );
+
+                            $documentRevision = app(
+                                CreateDocumentRevision::class,
+                            )->handle(
+                                document: $model,
+                                attributes: $data,
+                                file: $file instanceof UploadedFile
+                                    ? $file
+                                    : null,
+                            );
+
+                            Notification::make()
+                                ->success()
+                                ->title('Revision created')
+                                ->body(
+                                    "Revision {$documentRevision->revision} was created as a draft.",
+                                )
+                                ->send();
+
+                            return $documentRevision;
+                        },
+                    ),
             ])
             ->recordActions([
                 EditAction::make()
-                    ->label('Edit'),
+                    ->label('Edit Draft')
+                    ->visible(
+                        fn (DocumentRevision $record): bool => $record->status === DocumentRevisionStatus::Draft,
+                    ),
 
                 DeleteAction::make()
-                    ->requiresConfirmation(),
+                    ->requiresConfirmation()
+                    ->visible(
+                        fn (DocumentRevision $record): bool => $record->status === DocumentRevisionStatus::Draft,
+                    ),
             ])
             ->emptyStateIcon('heroicon-o-document')
             ->emptyStateHeading('No revisions')

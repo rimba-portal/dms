@@ -15,6 +15,7 @@ return new class extends Migration
             $table->string('status', 40)->default('draft')->index();
             $table->string('file_disk')->nullable();
             $table->string('file_path')->nullable();
+            $table->text('external_url')->nullable();
             $table->string('original_filename')->nullable();
             $table->string('mime_type', 150)->nullable();
             $table->unsignedBigInteger('file_size')->nullable();

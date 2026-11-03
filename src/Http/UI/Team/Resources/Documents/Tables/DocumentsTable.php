@@ -6,13 +6,13 @@ namespace Rimba\Document\Http\UI\Team\Resources\Documents\Tables;
 
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
-use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Rimba\Base\Support\LinkViewResolver;
-use Rimba\Document\Http\UI\Team\Resources\Documents\Actions\AddVersionAction;
+use Rimba\Document\Enums\DocumentStatus;
 use Rimba\Document\Http\UI\Team\Resources\Documents\DocumentResource;
+use Rimba\Document\Models\Document;
 
 class DocumentsTable
 {
@@ -37,11 +37,11 @@ class DocumentsTable
                     ->sortable()
                     ->wrap()
                     ->description(
-                        fn ($record): ?string => filled($record->description)
-                            ? str($record->description)
-                                ->limit(80)
-                                ->toString()
-                            : null
+                        fn (Document $record): ?string => filled($record->description)
+                                ? str($record->description)
+                                    ->limit(80)
+                                    ->toString()
+                                : null,
                     ),
 
                 TextColumn::make('type.name')
@@ -50,51 +50,57 @@ class DocumentsTable
                     ->sortable()
                     ->placeholder('-'),
 
-                TextColumn::make('currentVersion.version')
-                    ->label('Current Version')
+                TextColumn::make('status')
+                    ->label('Status')
                     ->badge()
-                    ->placeholder('Not released'),
+                    ->formatStateUsing(
+                        fn (DocumentStatus|string|null $state): string => $state instanceof DocumentStatus
+                                ? str($state->value)->headline()->toString()
+                                : str((string) $state)->headline()->toString(),
+                    )
+                    ->sortable(),
+
+                TextColumn::make('currentRevision.revision')
+                    ->label('Current Revision')
+                    ->badge()
+                    ->placeholder('Not effective'),
 
                 TextColumn::make('owner.name')
                     ->label('Owner')
                     ->placeholder('-')
                     ->toggleable(),
 
-                TextColumn::make('next_review_date')
-                    ->label('Next Review')
-                    ->date()
-                    ->sortable()
-                    ->placeholder('-'),
-
-                IconColumn::make('controlled')
-                    ->label('Controlled')
-                    ->boolean()
-                    ->toggleable(),
-
-                IconColumn::make('requires_training')
-                    ->label('Training')
-                    ->boolean()
-                    ->toggleable(),
-
                 TextColumn::make('updated_at')
                     ->label('Updated')
                     ->since()
-                    ->sortable()
-                    ->toggleable(
-                        isToggledHiddenByDefault: true,
-                    ),
+                    ->sortable(),
             ])
             ->filters([
                 SelectFilter::make('document_type_id')
                     ->label('Document Type')
-                    ->relationship('type', 'name')
+                    ->relationship(
+                        'type',
+                        'name',
+                    )
                     ->searchable()
                     ->preload(),
+
+                SelectFilter::make('status')
+                    ->label('Status')
+                    ->options(
+                        collect(DocumentStatus::cases())
+                            ->mapWithKeys(
+                                fn (DocumentStatus $status): array => [
+                                    $status->value => str($status->value)
+                                        ->headline()
+                                        ->toString(),
+                                ],
+                            )
+                            ->all(),
+                    ),
             ])
             ->recordActions([
                 ViewAction::make(),
-
-                AddVersionAction::make(),
 
                 EditAction::make()
                     ->label('Edit Metadata'),

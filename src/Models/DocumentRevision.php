@@ -18,6 +18,7 @@ use Rimba\Request\Concerns\HasWorkflows;
     'status',
     'file_disk',
     'file_path',
+    'external_url',
     'original_filename',
     'mime_type',
     'file_size',

@@ -38,7 +38,7 @@ class DocumentsTable
                     ->badge()
                     ->placeholder('-'),
 
-                TextColumn::make('currentVersion.version')
+                TextColumn::make('currentRevision.version')
                     ->label('Version')
                     ->badge()
                     ->placeholder('-'),
