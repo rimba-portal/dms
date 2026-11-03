@@ -38,13 +38,13 @@ class DocumentsTable
                     ->badge()
                     ->placeholder('-'),
 
-                TextColumn::make('currentRevision.version')
-                    ->label('Version')
+                TextColumn::make('currentRevision.revision')
+                    ->label('Revision')
                     ->badge()
                     ->placeholder('-'),
 
-                TextColumn::make('next_review_date')
-                    ->label('Review Date')
+                TextColumn::make('currentRevision.effective_at')
+                    ->label('Effective')
                     ->date()
                     ->placeholder('-'),
 

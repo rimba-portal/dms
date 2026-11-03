@@ -10,6 +10,8 @@ final class DocumentServiceProvider extends BitesServiceProvider
 {
     protected string $iconsPath = __DIR__.'/../resources/svg';
 
+    protected string $viewsPath = __DIR__.'/../resources/views';
+
     protected function registerPackage(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../config/document.php', 'document');

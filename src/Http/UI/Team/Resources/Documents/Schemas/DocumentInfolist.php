@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rimba\Document\Http\UI\Team\Resources\Documents\Schemas;
 
-use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
@@ -50,6 +49,18 @@ final class DocumentInfolist
                                                         : str((string) $state)->headline()->toString(),
                                             ),
 
+                                        TextEntry::make('owner_type')
+                                            ->label('Owner Type')
+                                            ->formatStateUsing(
+                                                fn (?string $state): string => $state
+                                                        ? class_basename($state)
+                                                        : '-',
+                                            ),
+
+                                        TextEntry::make('owner_id')
+                                            ->label('Owner ID')
+                                            ->placeholder('-'),
+
                                         TextEntry::make('description')
                                             ->label('Description')
                                             ->placeholder('-')
@@ -60,9 +71,9 @@ final class DocumentInfolist
                         Tab::make('Current Revision')
                             ->icon('heroicon-o-document-check')
                             ->schema([
-                                Section::make('Current Revision')
+                                Section::make('Effective Revision')
                                     ->description(
-                                        'The currently effective controlled revision of this document.',
+                                        'The currently effective controlled revision.',
                                     )
                                     ->columns(3)
                                     ->schema([
@@ -72,7 +83,7 @@ final class DocumentInfolist
                                             ->placeholder('Not effective'),
 
                                         TextEntry::make('currentRevision.status')
-                                            ->label('Revision Status')
+                                            ->label('Status')
                                             ->badge()
                                             ->placeholder('-')
                                             ->formatStateUsing(
@@ -83,11 +94,7 @@ final class DocumentInfolist
 
                                         TextEntry::make('currentRevision.original_filename')
                                             ->label('File')
-                                            ->placeholder(
-                                                fn ($record): string => filled($record->currentRevision?->external_url)
-                                                        ? 'External URL'
-                                                        : '-',
-                                            ),
+                                            ->placeholder('-'),
 
                                         TextEntry::make('currentRevision.mime_type')
                                             ->label('Content Type')
@@ -122,25 +129,12 @@ final class DocumentInfolist
                                     ]),
                             ]),
 
-                        Tab::make('Control')
-                            ->icon('heroicon-o-shield-check')
+                        Tab::make('Lifecycle')
+                            ->icon('heroicon-o-clock')
                             ->schema([
-                                Section::make('Document Control')
+                                Section::make('Revision Lifecycle')
                                     ->columns(3)
                                     ->schema([
-                                        TextEntry::make('next_review_date')
-                                            ->label('Next Review')
-                                            ->date()
-                                            ->placeholder('-'),
-
-                                        IconEntry::make('requires_training')
-                                            ->label('Training Required')
-                                            ->boolean(),
-
-                                        IconEntry::make('regulatory_impact')
-                                            ->label('Regulatory Impact')
-                                            ->boolean(),
-
                                         TextEntry::make('currentRevision.issued_at')
                                             ->label('Issued')
                                             ->dateTime()
@@ -155,6 +149,19 @@ final class DocumentInfolist
                                             ->label('Expires')
                                             ->dateTime()
                                             ->placeholder('-'),
+
+                                        TextEntry::make('currentRevision.approved_at')
+                                            ->label('Approved')
+                                            ->dateTime()
+                                            ->placeholder('-'),
+
+                                        TextEntry::make('currentRevision.created_by')
+                                            ->label('Created By')
+                                            ->placeholder('-'),
+
+                                        TextEntry::make('currentRevision.approved_by')
+                                            ->label('Approved By')
+                                            ->placeholder('-'),
                                     ]),
                             ]),
                     ])
@@ -162,8 +169,9 @@ final class DocumentInfolist
             ]);
     }
 
-    private static function formatBytes(int|string|null $bytes): string
-    {
+    private static function formatBytes(
+        int|string|null $bytes,
+    ): string {
         if ($bytes === null || $bytes === '') {
             return '-';
         }
@@ -175,6 +183,7 @@ final class DocumentInfolist
         }
 
         $units = ['B', 'KB', 'MB', 'GB'];
+
         $power = min(
             (int) floor(log($bytes, 1024)),
             count($units) - 1,

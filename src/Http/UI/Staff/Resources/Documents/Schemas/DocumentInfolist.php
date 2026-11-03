@@ -26,7 +26,7 @@ class DocumentInfolist
                 ])
                 ->schema([
                     ViewEntry::make('file_path')
-                        ->view('filament.infolists.components.attachment-view-entry')
+                        ->view('bites::view-document')
                         ->columnSpanFull(),
                 ]),
         ]);

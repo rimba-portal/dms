@@ -6,7 +6,6 @@ namespace Rimba\Document\Http\UI\Team\Resources\Documents\RelationManagers;
 
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
-use Filament\Actions\EditAction;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Textarea;
@@ -116,11 +115,29 @@ class DocumentRevisionsRelationManager extends RelationManager
             ->recordTitleAttribute('revision')
             ->defaultSort('created_at', 'desc')
             ->columns([
-                TextColumn::make('revision')
+                TextInput::make('revision')
                     ->label('Revision')
-                    ->badge()
-                    ->weight('bold')
-                    ->sortable(),
+                    ->placeholder('1.0')
+                    ->required()
+                    ->maxLength(50)
+                    ->rule(function (): \Closure {
+                        return function (
+                            string $attribute,
+                            mixed $value,
+                            \Closure $fail,
+                        ): void {
+                            if (
+                                $this->getOwnerRecord()
+                                    ->revisions()
+                                    ->where('revision', $value)
+                                    ->exists()
+                            ) {
+                                $fail(
+                                    'This revision already exists for the document.',
+                                );
+                            }
+                        };
+                    }),
 
                 TextColumn::make('status')
                     ->label('Status')
@@ -198,13 +215,8 @@ class DocumentRevisionsRelationManager extends RelationManager
                     ),
             ])
             ->recordActions([
-                EditAction::make()
-                    ->label('Edit Draft')
-                    ->visible(
-                        fn (DocumentRevision $record): bool => $record->status === DocumentRevisionStatus::Draft,
-                    ),
-
                 DeleteAction::make()
+                    ->label('Delete Draft')
                     ->requiresConfirmation()
                     ->visible(
                         fn (DocumentRevision $record): bool => $record->status === DocumentRevisionStatus::Draft,

@@ -65,11 +65,6 @@ class DocumentsTable
                     ->badge()
                     ->placeholder('Not effective'),
 
-                TextColumn::make('owner.name')
-                    ->label('Owner')
-                    ->placeholder('-')
-                    ->toggleable(),
-
                 TextColumn::make('updated_at')
                     ->label('Updated')
                     ->since()
@@ -86,7 +81,6 @@ class DocumentsTable
                     ->preload(),
 
                 SelectFilter::make('status')
-                    ->label('Status')
                     ->options(
                         collect(DocumentStatus::cases())
                             ->mapWithKeys(
